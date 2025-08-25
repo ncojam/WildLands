@@ -1,0 +1,17 @@
+portals:
+  - id: portal1
+    world: wild_lands
+    x: -968
+    y: 85
+    z: 215
+    linkedId: portal2
+  - id: portal2
+    world: world
+    x: 1522
+    y: 101
+    z: 799
+    linkedId: portal1
+
+approved-players:
+  - cojam420ebanat
+  - yourFriendHere

@@ -1,0 +1,8 @@
+protected-regions:
+  - world: wild_lands
+    x1: -976
+    y1: 78
+    z1: 207
+    x2: -959
+    y2: 95
+    z2: 230

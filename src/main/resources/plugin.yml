@@ -1,0 +1,4 @@
+name: WildLandsPlugin
+version: 1.0
+main: me.cojam.wildlands.WildLandsPlugin
+api-version: 1.20
