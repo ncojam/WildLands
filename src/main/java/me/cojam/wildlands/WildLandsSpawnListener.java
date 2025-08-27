@@ -79,59 +79,52 @@ public class WildLandsSpawnListener implements Listener {
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		
+
 		// approved — обычный респаун
 		if (portalManager.isApproved(player)) return;
-		
-		//if (event.isBedSpawn() || event.isAnchorSpawn()) return;
 
 		PortalManager.Portal portal = portalManager.getFirstPortal();
-		Location respawnLoc = (portal != null) ? portal.getLocation() : player.getWorld().getSpawnLocation();
-		handleRespawnLock(player, respawnLoc);
+		if (portal == null) return; // на всякий случай, если нет портала
 
+		Location respawnLoc = portal.getLocation();
 		event.setRespawnLocation(respawnLoc);
+
+		// через тик блокируем/возрождаем
+		Bukkit.getScheduler().runTaskLater(portalManager.getPlugin(), () -> {
+			handleRespawnLock(player, respawnLoc);
+		}, 1L);
 	}
+
 	
-	private void handleRespawnLock(Player player, Location defaultLoc) {
+	private void handleRespawnLock(Player player, Location portalLoc) {
 		long unlock = respawnManager.getUnlockTime(player);
 		long now = System.currentTimeMillis();
 
 		if (now < unlock) {
+			// Игрок должен ждать
 			long left = (unlock - now) / 1000;
 			player.sendMessage("§cТы ещё не можешь возродиться! Подожди " + left + " секунд.");
 
 			Bukkit.getScheduler().runTaskLater(portalManager.getPlugin(), () -> {
 				player.setGameMode(GameMode.SPECTATOR);
-
-				// Выбираем реальную точку респауна: кровать, портал, или дефолт
-				Location target;
-				if (player.getBedSpawnLocation() != null && player.getBedSpawnLocation().getWorld() != null) {
-					target = player.getBedSpawnLocation();
-				} else {
-					target = defaultLoc;
-				}
-
-				player.teleport(target);
+				player.teleport(portalLoc);
 				player.setHealth(20.0);
 				frozenSpectators.add(player.getUniqueId());
 			}, 1L);
 
 		} else {
-			// Время вышло — телепортируем игрока на кровать, если есть, иначе на портал/дефолт
-			Location target;
-			if (player.getBedSpawnLocation() != null && player.getBedSpawnLocation().getWorld() != null) {
-				target = player.getBedSpawnLocation();
-			} else {
-				target = defaultLoc;
-			}
-
-			player.setGameMode(GameMode.SURVIVAL);
-			player.teleport(target);
-			player.setHealth(20.0);
-			player.sendMessage("§aТы снова готов отправиться в Дикие земли!");
-			respawnManager.clearPlayerData(player);
+			// Можно возрождать
+			Bukkit.getScheduler().runTaskLater(portalManager.getPlugin(), () -> {
+				player.setGameMode(GameMode.SURVIVAL);
+				player.teleport(portalLoc);
+				player.setHealth(20.0);
+				player.sendMessage("§aТы снова готов отправиться в Дикие земли!");
+				respawnManager.clearPlayerData(player);
+			}, 1L);
 		}
 	}
+
+
 
 
 
