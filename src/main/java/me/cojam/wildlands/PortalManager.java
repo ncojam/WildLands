@@ -134,7 +134,12 @@ public class PortalManager {
 	}
 	
 	public Portal getFirstPortal() {
-		return portals.values().stream().findFirst().orElse(null);
+		//return portals.values().stream().findFirst().orElse(null);
+		return getPortalById("portal1");
+	}
+	
+	public Portal getPortalById(String id) {
+		return portals.get(id); // тут всё просто, потому что ключ = id
 	}
 
 

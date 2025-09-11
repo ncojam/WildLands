@@ -15,10 +15,20 @@ public class WildLandsPlugin extends JavaPlugin {
 	private File regionsFile;
     private FileConfiguration regionsConfig;
 	private WildLandsRespawnManager respawnManager;
+	private PortalManager portalManager;
 	
     @Override
     public void onEnable() {
         getLogger().info("Загружаем мир wild_lands...");
+		
+		// Сначала инициализируем поле
+		this.portalManager = new PortalManager(this);
+		this.respawnManager = new WildLandsRespawnManager(this);
+		
+		// Регистрируем слушателей
+		Bukkit.getPluginManager().registerEvents(new WildLandsSpawnListener(portalManager, respawnManager), this);
+		Bukkit.getPluginManager().registerEvents(new WildLandsDeathListener(this, respawnManager), this);
+
 
 		// Загружаем мир wild_lands
 		WorldCreator wcWild = new WorldCreator("wild_lands");
@@ -44,6 +54,18 @@ public class WildLandsPlugin extends JavaPlugin {
 			new WildLandsSpawnListener(portalManager, respawnManager), this
 		);
 
+		getCommand("wildlandsreload").setExecutor((sender, command, label, args) -> {
+			if (!sender.isOp()) {
+				sender.sendMessage("§cУ тебя нет прав на эту команду.");
+				return true;
+			}
+
+			this.portalManager.reloadPortals();
+			this.respawnManager.loadRespawnTimes();
+
+			sender.sendMessage("§aКонфиги WildLands перезагружены!");
+			return true;
+		});
 
 		// ОТОБРАЗИТЬ ВСЕХ ИГРОКОВ:
 		/*getLogger().info("WildLandsPlugin включён!");

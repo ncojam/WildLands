@@ -10,6 +10,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,14 @@ public class WildLandsProtectionListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         handleProtection(event.getPlayer(), event.getBlock().getWorld(),
+                event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event);
+    }
+	
+	    // Редактирование текста на табличках
+    @EventHandler
+    public void onSignChange(SignChangeEvent event) {
+        Player player = event.getPlayer();
+        handleProtection(player, event.getBlock().getWorld(),
                 event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event);
     }
 	
