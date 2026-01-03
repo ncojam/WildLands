@@ -1,4 +1,4 @@
-package me.cojam.wildlands;
+package ru.cojam.wildlands;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;

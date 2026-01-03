@@ -12,7 +12,7 @@ dependencies {
 
 bukkit {
     name = "WildLandsPlugin"
-    main = "me.cojam.wildlands.WildLandsPlugin"
+    main = "${(rootProject.group.toString())}.wildlands.WildLandsPlugin"
     generateLibrariesJson = true
     apiVersion = "${property("paperApiVersion")}"
     commands {
