@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v6
       with:
         name: WildLandsPlugin-${{ steps.get_version.outputs.PLUGIN_VERSION }}
-        path: build/libs/*.jar
+        path: wildlands/build/libs/*.jar

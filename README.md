@@ -24,4 +24,4 @@ or (for Windows)
 ./gradlew.bat build
 ```
 
-The build artifacts (JAR file) will be located in the `build/libs/` directory.
+The build artifacts (JAR file) will be located in the `wildlands/build/libs/` directory.
