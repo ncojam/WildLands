@@ -25,7 +25,7 @@ jobs:
 
     - name: Get plugin version
       id: get_version
-      run: echo "PLUGIN_VERSION=$(grep 'version = "' build.gradle.kts | head -n 1 | sed 's/.*version = "\(.*\)"/\1/')" >> $GITHUB_OUTPUT
+      run: echo "PLUGIN_VERSION=$(grep 'version = "' wildlands/build.gradle.kts | head -n 1 | sed 's/.*version = "\(.*\)"/\1/')" >> $GITHUB_OUTPUT
 
     - name: Build with Gradle
       run: ./gradlew build

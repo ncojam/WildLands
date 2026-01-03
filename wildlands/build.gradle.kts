@@ -4,7 +4,7 @@ plugins {
 }
 
 group = rootProject.group.toString()
-version = 1.2
+version = "1.2"
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${property("paperVersion")}")
