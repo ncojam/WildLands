@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    id("de.eldoria.plugin-yml.bukkit") version "0.8.0"
 }
 
 group = "me.cojam"
@@ -17,6 +18,20 @@ dependencies {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+bukkit {
+    main = "me.cojam.wildlands.WildLandsPlugin"
+    generateLibrariesJson = true
+    apiVersion = "1.21.11"
+    commands {
+        register("wildlandsreload") {
+            description = "Перезагрузка approved players и respawn таймингов"
+            usage = "/wildlandsreload"
+            permission = "wildlands.reload"
+            permissionMessage = "У тебя нет прав на это"
+        }
     }
 }
 
