@@ -18,17 +18,20 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: maven
+        cache: gradle
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
 
     - name: Get plugin version
       id: get_version
-      run: echo "PLUGIN_VERSION=$(grep -m 1 '<version>' pom.xml | sed 's/.*<version>\(.*\)<\/version>.*/\1/' | xargs)" >> $GITHUB_OUTPUT
+      run: echo "PLUGIN_VERSION=$(grep 'version = "' build.gradle.kts | head -n 1 | sed 's/.*version = "\(.*\)"/\1/')" >> $GITHUB_OUTPUT
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    - name: Build with Gradle
+      run: ./gradlew build
 
     - name: Upload Plugin Artifact
       uses: actions/upload-artifact@v6
       with:
         name: WildLandsPlugin-${{ steps.get_version.outputs.PLUGIN_VERSION }}
-        path: target/*.jar
+        path: build/libs/*.jar
