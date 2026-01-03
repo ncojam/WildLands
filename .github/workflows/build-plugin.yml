@@ -1,5 +1,7 @@
 name: Build Plugin
 
+run-name: Build Plugin (${{ github.head_ref || github.ref_name }})
+
 on:
   workflow_dispatch:
 
