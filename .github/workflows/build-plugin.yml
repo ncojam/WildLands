@@ -1,0 +1,37 @@
+name: Build Plugin
+
+run-name: Build Plugin (${{ github.head_ref || github.ref_name }})
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
+
+    - name: Get plugin version
+      id: get_version
+      run: echo "PLUGIN_VERSION=$(grep 'version = "' wildlands/build.gradle.kts | head -n 1 | sed 's/.*version = "\(.*\)"/\1/')" >> $GITHUB_OUTPUT
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Upload Plugin Artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: WildLandsPlugin-${{ steps.get_version.outputs.PLUGIN_VERSION }}
+        path: wildlands/build/libs/*.jar
